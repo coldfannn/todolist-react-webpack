@@ -1,10 +1,17 @@
 import * as React from 'react'
 
+interface InputAreaProps {
+  insertCallback(currentTask: String): void
+}
+
 interface InputAreaState {
   currentTask: String
 }
 
-export class InputArea extends React.Component<{}, InputAreaState> {
+export class InputArea extends React.Component<InputAreaProps, InputAreaState> {
+  static PropTypes = {
+    insertCallback: React.PropTypes.func.isRequired,
+  }
   constructor() {
     super()
     this.state = {
@@ -19,8 +26,10 @@ export class InputArea extends React.Component<{}, InputAreaState> {
     })
   }
   handleSubmit = () => {
-    alert(this.state.currentTask)
-    // console.warn(this.state.currentTask)
+    this.setState({
+      currentTask: ''
+    })
+    this.props.insertCallback(this.state.currentTask)
   }
   render() {
     return (
@@ -32,7 +41,7 @@ export class InputArea extends React.Component<{}, InputAreaState> {
         />
         <button onClick={ this.handleSubmit }>Submit</button>
         <div>
-          { this.state.currentTask }
+          _________________________________
         </div>
       </div>
     )

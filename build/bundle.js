@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "57767de4e6c1a3751d34"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "e740f6e78115203c5a76"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -39733,14 +39733,45 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
 var React = __webpack_require__("./node_modules/react/react.js");
 var InputArea_1 = __webpack_require__("./src/components/InputArea.tsx");
+var ToDoList_1 = __webpack_require__("./src/components/ToDoList.tsx");
 var HelloWorld = (function (_super) {
     tslib_1.__extends(HelloWorld, _super);
     function HelloWorld() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super.call(this) || this;
+        _this.handleInsert = function (content) {
+            var toDoList = _this.state.toDoList;
+            toDoList.unshift({
+                _id: '12313123',
+                content: content,
+                isDone: false,
+                isChecked: false
+            });
+            _this.refreshList(toDoList);
+        };
+        _this.handleChange = function (type, idx) {
+            var toDoList = _this.state.toDoList;
+            if (type === 'done') {
+                toDoList[idx].isDone = !toDoList[idx].isDone;
+            }
+            else if (type === 'checked') {
+                toDoList[idx].isChecked = !toDoList[idx].isChecked;
+            }
+            _this.refreshList(toDoList);
+        };
+        _this.state = {
+            toDoList: []
+        };
+        return _this;
     }
+    HelloWorld.prototype.refreshList = function (toDoList) {
+        this.setState({
+            toDoList: toDoList
+        });
+    };
     HelloWorld.prototype.render = function () {
         return (React.createElement("div", null,
-            React.createElement(InputArea_1.InputArea, null)));
+            React.createElement(InputArea_1.InputArea, { insertCallback: this.handleInsert }),
+            React.createElement(ToDoList_1.ToDoList, { toDoList: this.state.toDoList, changedListCallback: this.handleChange })));
     };
     return HelloWorld;
 }(React.Component));
@@ -39769,7 +39800,7 @@ var InputArea = (function (_super) {
             });
         };
         _this.handleSubmit = function () {
-            alert(_this.state.currentTask);
+            _this.props.insertCallback(_this.state.currentTask);
         };
         _this.state = {
             currentTask: ''
@@ -39785,7 +39816,89 @@ var InputArea = (function (_super) {
     };
     return InputArea;
 }(React.Component));
+InputArea.PropTypes = {
+    insertCallback: React.PropTypes.func.isRequired,
+};
 exports.InputArea = InputArea;
+
+
+/***/ }),
+
+/***/ "./src/components/ToDoList.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
+var React = __webpack_require__("./node_modules/react/react.js");
+var ToDoFrame_1 = __webpack_require__("./src/components/frame/ToDoFrame.tsx");
+var ToDoList = (function (_super) {
+    tslib_1.__extends(ToDoList, _super);
+    function ToDoList() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.handleChange = function (type, idx) {
+            if (type === 'checked') {
+                _this.props.changedListCallback('checked', idx);
+            }
+            else if (type === 'done') {
+                _this.props.changedListCallback('done', idx);
+            }
+        };
+        return _this;
+    }
+    ToDoList.prototype.renderList = function () {
+        var _this = this;
+        this.props.toDoList.map(function (current, idx) {
+            return (React.createElement(ToDoFrame_1.ToDoFrame, { key: "toDoFrame" + idx, idx: idx, toDoFrameContent: current, manipulateCallback: _this.handleChange }));
+        });
+    };
+    ToDoList.prototype.render = function () {
+        return (React.createElement("div", null, this.renderList()));
+    };
+    return ToDoList;
+}(React.Component));
+ToDoList.PropTypes = {
+    toDoList: React.PropTypes.array.isRequired,
+    changedListCallback: React.PropTypes.func.isRequired,
+};
+exports.ToDoList = ToDoList;
+
+
+/***/ }),
+
+/***/ "./src/components/frame/ToDoFrame.tsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = __webpack_require__("./node_modules/tslib/tslib.es6.js");
+var React = __webpack_require__("./node_modules/react/react.js");
+var ToDoFrame = (function (_super) {
+    tslib_1.__extends(ToDoFrame, _super);
+    function ToDoFrame() {
+        return _super.call(this) || this;
+    }
+    ToDoFrame.prototype.handleDone = function () {
+        this.props.manipulateCallback('done', this.props.idx);
+    };
+    ToDoFrame.prototype.render = function () {
+        return (React.createElement("div", null,
+            React.createElement("p", null,
+                this.props.idx,
+                " : ",
+                this.props.toDoFrameContent.content),
+            React.createElement("button", { onClick: this.handleDone }, "Done")));
+    };
+    return ToDoFrame;
+}(React.Component));
+ToDoFrame.PropTypes = {
+    toDoFrameContent: React.PropTypes.object.isRequired,
+    idx: React.PropTypes.number.isRequired,
+    manipulateCallback: React.PropTypes.func.isRequired,
+};
+exports.ToDoFrame = ToDoFrame;
 
 
 /***/ }),
