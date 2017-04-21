@@ -4,7 +4,8 @@ import { ToDoFrame } from './frame/ToDoFrame'
 
 interface ToDoListProps {
   toDoList: ToDo[]
-  changedListCallback(type: String, idx: Number): void
+  changedListCallback(type: string, id: string): void
+  updatedListCallback(updateContent: string, id: string): void
 }
 
 export class ToDoList extends React.Component<ToDoListProps, {}> {
@@ -13,22 +14,27 @@ export class ToDoList extends React.Component<ToDoListProps, {}> {
     changedListCallback: React.PropTypes.func.isRequired,
   }
 
-  handleChange = (type: String, idx: Number) => {
+  handleChange = (type: string, id: string) => {
     if (type === 'checked') {
-      this.props.changedListCallback('checked', idx)
+      this.props.changedListCallback('checked', id)
     } else if (type === 'done') {
-      this.props.changedListCallback('done', idx)
+      this.props.changedListCallback('done', id)
     }
   }
 
+  handleUpdate = (updateContent: string, id: string) => {
+    this.props.updatedListCallback(updateContent, id)
+  }
+
   renderList() {
-    const itemsEl = this.props.toDoList.map((current: ToDo, idx: Number) => {
+    const itemsEl = this.props.toDoList.map((current: ToDo, idx: number) => {
       return (
         <ToDoFrame
-          key={ `toDoFrame${idx}` }
+          key={ `toDoFrame_${current._id}` }
           idx={ idx }
           toDoFrameContent={ current }
           manipulateCallback={ this.handleChange }
+          manipulateUpdateCallback={ this.handleUpdate }
         />
       )
     })

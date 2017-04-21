@@ -1,6 +1,6 @@
 export interface ToDo {
-  _id: String
-  content: String
-  isDone: Boolean
-  isChecked: Boolean
+  _id: string
+  content: string
+  isDone: boolean
+  isChecked: boolean
 }

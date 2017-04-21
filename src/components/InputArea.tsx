@@ -1,11 +1,11 @@
 import * as React from 'react'
 
 interface InputAreaProps {
-  insertCallback(currentTask: String): void
+  insertCallback(currentTask: string): void
 }
 
 interface InputAreaState {
-  currentTask: String
+  currentTask: string
 }
 
 export class InputArea extends React.Component<InputAreaProps, InputAreaState> {
@@ -26,6 +26,8 @@ export class InputArea extends React.Component<InputAreaProps, InputAreaState> {
     })
   }
   handleSubmit = () => {
+    const ele = document.getElementById('taskInput') as HTMLInputElement
+    ele.value = ''
     this.setState({
       currentTask: ''
     })
@@ -36,6 +38,7 @@ export class InputArea extends React.Component<InputAreaProps, InputAreaState> {
       <div>
         <h2>Type Ur Task</h2>
         <input
+          id='taskInput'
           type='text'
           onChange={ this.handleChange }
         />
