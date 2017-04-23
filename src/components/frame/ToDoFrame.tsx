@@ -39,6 +39,11 @@ export class ToDoFrame extends React.Component<ToDoFrameProps, ToDoFrameState> {
     const ele = document.getElementById(`updateIpt_${id}`) as HTMLInputElement
     ele.value = this.props.toDoFrameContent.content
   }
+  componentWillReceiveProps(nextProps) {
+    const id = this.props.toDoFrameContent._id
+    const ele = document.getElementById(`checked_${id}`) as HTMLInputElement
+    ele.checked = nextProps.toDoFrameContent.isChecked
+  }
   handleChange = (type: string) => (_) => {
     const id = this.props.toDoFrameContent._id
     this.props.manipulateCallback(type, id)
@@ -87,6 +92,7 @@ export class ToDoFrame extends React.Component<ToDoFrameProps, ToDoFrameState> {
     return (
       <div>
         <input
+          id={`checked_${this.props.toDoFrameContent._id}`}
           type='checkbox'
           onChange={ this.handleChange('checked') }
         />
