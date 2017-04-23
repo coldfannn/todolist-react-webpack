@@ -12,14 +12,11 @@ export class ToDoList extends React.Component<ToDoListProps, {}> {
   static PropTypes = {
     toDoList: React.PropTypes.array.isRequired,
     changedListCallback: React.PropTypes.func.isRequired,
+    updatedListCallback: React.PropTypes.func.isRequired,
   }
 
   handleChange = (type: string, id: string) => {
-    if (type === 'checked') {
-      this.props.changedListCallback('checked', id)
-    } else if (type === 'done') {
-      this.props.changedListCallback('done', id)
-    }
+    this.props.changedListCallback(type, id)
   }
 
   handleUpdate = (updateContent: string, id: string) => {
@@ -42,6 +39,7 @@ export class ToDoList extends React.Component<ToDoListProps, {}> {
   }
 
   render() {
+    console.warn(this.props.toDoList)
     return (
       <div>
         { this.renderList() }
