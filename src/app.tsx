@@ -31,6 +31,11 @@ export class HelloWorld extends React.Component<{}, ToDoListState> {
           current.isDone = current.isChecked ? true : current.isDone
         })
         break
+      case 'undone':
+        toDoList.forEach((current) => {
+          current.isDone = current.isChecked ? false : current.isDone
+        })
+        break
       default:
         // delete
         for (let i = 0; i < toDoList.length; i += 1) {

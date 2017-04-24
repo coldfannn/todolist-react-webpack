@@ -44,6 +44,7 @@ export class GlobalControlCenter extends React.Component<GlobalControlCenterProp
           onChange={ this.handleCheckedAll }
         />
         <button onClick={ this.handleSubmit('done') }>Done All</button>
+        <button onClick={ this.handleSubmit('undone') }>Undone All</button>
         <button onClick={ this.handleSubmit('delete') }>Delete All</button>
         <div>
           _________________________________
