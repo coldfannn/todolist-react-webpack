@@ -12,12 +12,14 @@ export class InputArea extends React.Component<InputAreaProps, InputAreaState> {
   static PropTypes = {
     insertCallback: React.PropTypes.func.isRequired,
   }
+
   constructor() {
     super()
     this.state = {
       currentTask: ''
     }
   }
+
   handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement
     const value = target.value
@@ -25,6 +27,7 @@ export class InputArea extends React.Component<InputAreaProps, InputAreaState> {
       currentTask: value
     })
   }
+
   handleSubmit = () => {
     const ele = document.getElementById('taskInput') as HTMLInputElement
     ele.value = ''
@@ -33,6 +36,7 @@ export class InputArea extends React.Component<InputAreaProps, InputAreaState> {
     })
     this.props.insertCallback(this.state.currentTask)
   }
+
   render() {
     return (
       <div>

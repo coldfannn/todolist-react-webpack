@@ -32,6 +32,7 @@ export class HelloWorld extends React.Component<{}, ToDoListState> {
         })
         break
       default:
+        // delete
         for (let i = 0; i < toDoList.length; i += 1) {
           if (toDoList[i].isChecked) {
             toDoList.splice(i, 1)
@@ -66,7 +67,7 @@ export class HelloWorld extends React.Component<{}, ToDoListState> {
     const idx = _.map(toDoList, '_id').indexOf(id)
     if (type === 'done') {
       toDoList[idx].isDone = !toDoList[idx].isDone
-    } else {
+    } else if (type === 'checked') {
       toDoList[idx].isChecked = !toDoList[idx].isChecked
     }
     this.refreshList(toDoList)

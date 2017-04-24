@@ -37,7 +37,7 @@ export class GlobalControlCenter extends React.Component<GlobalControlCenterProp
   render() {
     return (
       <div>
-        <h2>Global Control</h2>
+        <h3>Global Control</h3>
         <input
           id='checkAllInput'
           type='checkbox'
