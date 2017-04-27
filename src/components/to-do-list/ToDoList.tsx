@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ToDo } from  './interface/ToDo'
+import { ToDo } from  '../../interface/ToDo'
 import { ToDoFrame } from './frame/ToDoFrame'
 
 interface ToDoListProps {
@@ -39,7 +39,6 @@ export class ToDoList extends React.Component<ToDoListProps, {}> {
   }
 
   render() {
-    console.warn(this.props.toDoList)
     return (
       <div>
         { this.renderList() }

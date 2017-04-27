@@ -16,13 +16,14 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, 'build'),
     hot: true,
-    publicPath:'/'
+    publicPath:'/',
+    port: '9000'
   },
   resolve: {
     extensions: ['.js', '.coffee', '.tsx', '.ts', '.html']
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
@@ -38,8 +39,18 @@ module.exports = {
         loaders: ['awesome-typescript-loader', 'tslint-loader']
       },
       {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
         test: /\.less$/,
-        loader: "style!css!less"
+        use: [{
+          loader: "style-loader"
+        }, {
+          loader: "css-loader"
+        }, {
+          loader: "less-loader"
+        }]
       }
     ]
   },

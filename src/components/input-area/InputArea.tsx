@@ -29,12 +29,13 @@ export class InputArea extends React.Component<InputAreaProps, InputAreaState> {
   }
 
   handleSubmit = () => {
-    const ele = document.getElementById('taskInput') as HTMLInputElement
-    ele.value = ''
+    this.props.insertCallback(this.state.currentTask)
     this.setState({
       currentTask: ''
+    }, () => {
+      const ele = document.getElementById('taskInput') as HTMLInputElement
+      ele.value = ''
     })
-    this.props.insertCallback(this.state.currentTask)
   }
 
   render() {
