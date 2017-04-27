@@ -37,13 +37,14 @@ export class GlobalControlCenter extends React.Component<GlobalControlCenterProp
   render() {
     return (
       <div>
-        <h2>Global Control</h2>
+        <h3>Global Control</h3>
         <input
           id='checkAllInput'
           type='checkbox'
           onChange={ this.handleCheckedAll }
         />
         <button onClick={ this.handleSubmit('done') }>Done All</button>
+        <button onClick={ this.handleSubmit('undone') }>Undone All</button>
         <button onClick={ this.handleSubmit('delete') }>Delete All</button>
         <div>
           _________________________________

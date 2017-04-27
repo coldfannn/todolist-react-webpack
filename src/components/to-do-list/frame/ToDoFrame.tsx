@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as $ from 'jquery'
-import { ToDo } from '../interface/ToDo'
+import { ToDo } from '../../../interface/ToDo'
 
 interface ToDoFrameProps {
   toDoFrameContent: ToDo
@@ -28,35 +28,51 @@ export class ToDoFrame extends React.Component<ToDoFrameProps, ToDoFrameState> {
     idx: React.PropTypes.number.isRequired,
     manipulateCallback: React.PropTypes.func.isRequired,
   }
+
   constructor() {
     super()
     this.state = {
       updateContent: ''
     }
   }
+
+  getCurrentId = () => {
+    return this.props.toDoFrameContent._id
+  }
+
+  btnAnimate = (type: string) => {
+    const id = this.getCurrentId()
+    if (type === 'initial') {
+      $(`#updateBtn_${id}`).fadeIn()
+      $(`#doneBtn_${id}`).fadeIn()
+      $(`#taskContent_${id}`).fadeIn()
+      $(`#yesBtn_${id}`).hide()
+      $(`#noBtn_${id}`).hide()
+      $(`#updateIpt_${id}`).hide()
+    } else {
+      $(`#updateBtn_${id}`).hide()
+      $(`#doneBtn_${id}`).hide()
+      $(`#taskContent_${id}`).hide()
+      $(`#yesBtn_${id}`).fadeIn()
+      $(`#noBtn_${id}`).fadeIn()
+      $(`#updateIpt_${id}`).fadeIn()
+    }
+  }
+
   componentDidMount() {
-    const id = this.props.toDoFrameContent._id
-    const ele = document.getElementById(`updateIpt_${id}`) as HTMLInputElement
+    const ele = document.getElementById(`updateIpt_${this.getCurrentId()}`) as HTMLInputElement
     ele.value = this.props.toDoFrameContent.content
   }
+
   componentWillReceiveProps(nextProps) {
-    const id = this.props.toDoFrameContent._id
-    const ele = document.getElementById(`checked_${id}`) as HTMLInputElement
+    const ele = document.getElementById(`checked_${this.getCurrentId()}`) as HTMLInputElement
     ele.checked = nextProps.toDoFrameContent.isChecked
   }
-  handleChange = (type: string) => (_) => {
-    const id = this.props.toDoFrameContent._id
-    this.props.manipulateCallback(type, id)
+
+  handleStatusChange = (type: string) => (_) => {
+    this.props.manipulateCallback(type, this.getCurrentId())
   }
-  btnAnimate = () => {
-    const id = this.props.toDoFrameContent._id
-    $(`#updateBtn_${id}`).fadeIn()
-    $(`#doneBtn_${id}`).fadeIn()
-    $(`#taskContent_${id}`).fadeIn()
-    $(`#yesBtn_${id}`).hide()
-    $(`#noBtn_${id}`).hide()
-    $(`#updateIpt_${id}`).hide()
-  }
+
   handleUpdateContentChange = (event: React.FormEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement
     const value = target.value
@@ -64,37 +80,33 @@ export class ToDoFrame extends React.Component<ToDoFrameProps, ToDoFrameState> {
       updateContent: value
     })
   }
+
   handleUpdateSubmit = () => {
-    const id = this.props.toDoFrameContent._id
-    this.props.manipulateUpdateCallback(this.state.updateContent, id)
-    this.btnAnimate()
+    this.props.manipulateUpdateCallback(this.state.updateContent, this.getCurrentId())
+    this.btnAnimate('initial')
   }
-  handleUpdateBtnClick = () => {
-    const id = this.props.toDoFrameContent._id
-    $(`#updateBtn_${id}`).hide()
-    $(`#doneBtn_${id}`).hide()
-    $(`#taskContent_${id}`).hide()
-    $(`#yesBtn_${id}`).fadeIn()
-    $(`#noBtn_${id}`).fadeIn()
-    $(`#updateIpt_${id}`).fadeIn()
-  }
-  handleCancel = () => {
-    const id = this.props.toDoFrameContent._id
+
+  handleUpdateCancel = () => {
     this.setState({
       updateContent: this.props.toDoFrameContent.content
     }, () => {
-      const ele = document.getElementById(`updateIpt_${id}`) as HTMLInputElement
+      const ele = document.getElementById(`updateIpt_${this.getCurrentId()}`) as HTMLInputElement
       ele.value = this.props.toDoFrameContent.content
-      this.btnAnimate()
+      this.btnAnimate('initial')
     })
   }
+
+  handleUpdateBtnClick = () => {
+    this.btnAnimate('confirm')
+  }
+
   render() {
     return (
       <div>
         <input
           id={`checked_${this.props.toDoFrameContent._id}`}
           type='checkbox'
-          onChange={ this.handleChange('checked') }
+          onChange={ this.handleStatusChange('checked') }
         />
         <span
           id={`taskContent_${this.props.toDoFrameContent._id}`}
@@ -111,7 +123,7 @@ export class ToDoFrame extends React.Component<ToDoFrameProps, ToDoFrameState> {
         <div id='btnArea'>
           <button
             id={`doneBtn_${this.props.toDoFrameContent._id}`}
-            onClick={ this.handleChange('done') }
+            onClick={ this.handleStatusChange('done') }
             style={ styles.show }
           >
             Done
@@ -133,7 +145,7 @@ export class ToDoFrame extends React.Component<ToDoFrameProps, ToDoFrameState> {
           </button>
           <button
             id={`noBtn_${this.props.toDoFrameContent._id}`}
-            onClick={ this.handleCancel }
+            onClick={ this.handleUpdateCancel }
             style={ styles.hide }
           >
             No
